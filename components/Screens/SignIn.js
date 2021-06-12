@@ -1,36 +1,71 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, TextInput } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import React, { Component } from 'react';
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import office from '../../assets/office.jpg';
+import { connect } from 'react-redux';
+import {loginEmailAccount} from '../redux/actions/authActions';
 
-const SignIn = ({ navigation }) => {
-    return (
-        <View>
-            <Image source={office} style={styles.backGround} />
-            <View style={styles.TextInputContainer}>
-                <View style={styles.signInInfo}>
-                    <Text>Email       </Text>
-                    <TextInput style={styles.myTextInput} placeholder="Email" textAlign="right" />
+class SignIn extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            email: "",
+            password: "",
+        }
+    }
+
+    handleUpdateState = (name, value) => {
+        this.setState({
+            [name]: value
+        })
+    }
+
+    handleOnSubmit = () => {
+        this.props.loginEmailAccount(this.state.email, this.state.password)
+    }
+    render() {
+        const { auth, navigation } = this.props
+        return (
+            <ScrollView>
+                <Image source={office} style={styles.backGround} />
+                <View style={styles.TextInputContainer}>
+                {
+                    auth.error.login &&
+                    <Text style={{ color: 'red' }}>{auth.error.login}</Text>
+                }
+                    <View style={styles.signInInfo}>
+                        <Text>Email       </Text>
+                        <TextInput style={styles.myTextInput}
+                        value={this.state.email}
+                        onChangeText={(text) => {
+                            this.handleUpdateState('email', text)
+                        }} 
+                        placeholder="Email" textAlign="right" />
+                    </View>
+                    <Text style={styles.horizontalBar}></Text>
+                    <View style={styles.signInInfo}>
+                        <Text>Password</Text>
+                        <TextInput style={styles.myTextInput}
+                        value={this.state.password}
+                        onChangeText={(text) => {
+                            this.handleUpdateState('password', text)
+                        }}
+                         placeholder="Password" secureTextEntry={true} textAlign="right" />
+                    </View>
                 </View>
-                <Text style={styles.horizontalBar}></Text>
-                <View style={styles.signInInfo}>
-                    <Text>Password</Text>
-                    <TextInput style={styles.myTextInput} placeholder="Password" secureTextEntry={true} textAlign="right" />
+                <View style={styles.SignInContainer}>
+                    <TouchableOpacity style={styles.SignInButton} onPress={this.handleOnSubmit}>
+                        <Text style={styles.SignInText}>SIGN IN</Text>
+                    </TouchableOpacity></View>
+                <View style={styles.forgotPasswordContainer}>
+                    <Text style={styles.mainText}>Forgot?</Text>
+                    <TouchableOpacity>
+                        <Text style={styles.mainText}>Reset Password</Text>
+                        <Text style={styles.horizontalBar2}></Text>
+                    </TouchableOpacity>
                 </View>
-            </View>
-            <View style={styles.SignInContainer}>
-                <TouchableOpacity style={styles.SignInButton} onPress={()=>navigation.navigate("Home")}>
-                    <Text style={styles.SignInText}>SIGN IN</Text>
-                </TouchableOpacity></View>
-            <View style={styles.forgotPasswordContainer}>
-                <Text style={styles.mainText}>Forgot?</Text>
-                <TouchableOpacity>
-                    <Text style={styles.mainText}>Reset Password</Text>
-                    <Text style={styles.horizontalBar2}></Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-    );
+            </ScrollView>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
@@ -62,6 +97,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         marginHorizontal: 95,
         height: 45,
+        marginBottom:-5
 
     },
     SignInText: {
@@ -69,7 +105,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: 'bold',
     },
-    signInInfo:{
+    signInInfo: {
         display: 'flex',
         flexDirection: 'row',
         marginVertical: 7,
@@ -80,7 +116,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 60
+        marginTop: 40
     },
     horizontalBar2: {
         height: 3,
@@ -101,4 +137,8 @@ const styles = StyleSheet.create({
 })
 
 
-export default SignIn;
+const mapStateToProp = (state) => {
+    return { auth: state }
+}
+
+export default connect(mapStateToProp, {loginEmailAccount})(SignIn);
