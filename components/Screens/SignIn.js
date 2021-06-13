@@ -25,7 +25,7 @@ class SignIn extends Component {
     render() {
         const { auth, navigation } = this.props
         return (
-            <ScrollView>
+            <ScrollView alwaysBounceVertical={true} showsVerticalScrollIndicator={false}>
                 <Image source={office} style={styles.backGround} />
                 <View style={styles.TextInputContainer}>
                 {
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 40
+        marginTop: 60,
     },
     horizontalBar2: {
         height: 3,

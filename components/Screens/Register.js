@@ -31,7 +31,7 @@ class Register extends Component {
     render() {
         const { auth, navigation } = this.props
         return (
-            <ScrollView>
+            <ScrollView alwaysBounceVertical={true} showsVerticalScrollIndicator={false}>
                 <Image style={styles.profilePictureBackground} source={profilePicture} />
                 <View style={styles.iconContainer}>
                     <TouchableOpacity>

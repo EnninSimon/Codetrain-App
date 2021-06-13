@@ -27,7 +27,7 @@ const Home = ({ navigation }) => {
     if (hasPermission === null) {
     return (<View >
         <Text style={styles.requestContainer}>Requesting for camera permissions</Text> 
-        <Entypo name="camera" size={60} color="black" />
+        <Entypo style={styles.sadEmoji} name="camera" size={60} color="black" />
     </View>)
 }
     if (hasPermission === false) {
